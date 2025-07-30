@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* Pure White */
+    --foreground: 210 5% 20%; /* Very Dark Grey */
+    --card: 0 0% 100%;
+    --card-foreground: 210 5% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 5% 20%;
+    --primary: 30 90% 50%; /* Richer Orange */
+    --primary-foreground: 0 0% 98%; /* White */
+    --secondary: 210 10% 97%; /* Very Light Grey */
+    --secondary-foreground: 210 5% 20%;
+    --muted: 210 10% 95%;
+    --muted-foreground: 210 5% 40%;
+    --accent: 210 10% 97%; /* Same as secondary for subtle background */
+    --accent-foreground: 210 5% 20%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 210 10% 90%;
+    --input: 210 10% 90%;
+    --ring: 30 90% 50%; /* Richer Orange ring */
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 220 10% 8%; /* Even Deeper Charcoal Blue for background */
+    --foreground: 0 0% 98%; /* Off-White */
+    --card: 220 10% 12%; /* Slightly lighter charcoal for cards */
+    --card-foreground: 0 0% 98%;
+    --popover: 220 10% 12%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 30 90% 50%; /* Richer Orange */
+    --primary-foreground: 220 10% 10%; /* Dark Charcoal Blue */
+    --secondary: 220 10% 15%; /* Darker grey for accent */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 220 10% 15%;
+    --muted-foreground: 220 10% 60%;
+    --accent: 220 10% 15%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 220 10% 20%;
+    --input: 220 10% 20%;
+    --ring: 30 90% 50%; /* Richer Orange ring */
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
