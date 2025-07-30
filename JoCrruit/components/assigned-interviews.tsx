@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -103,11 +103,28 @@ const interviewStats = {
 }
 
 export function AssignedInterviews() {
+  const [interviews, setInterviews] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [filterStatus, setFilterStatus] = useState("all")
   const [filterType, setFilterType] = useState("all")
 
-  const filteredInterviews = assignedInterviews.filter((interview) => {
+  useEffect(() => {
+    async function fetchAssigned() {
+      setLoading(true)
+      try {
+        const res = await fetch("/api/users/assigned-interviews")
+        if (res.ok) {
+          const data = await res.json()
+          setInterviews(data.data.interviews)
+        }
+      } catch {}
+      setLoading(false)
+    }
+    fetchAssigned()
+  }, [])
+
+  const filteredInterviews = interviews.filter((interview) => {
     const matchesSearch =
       interview.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       interview.organization.toLowerCase().includes(searchTerm.toLowerCase())
