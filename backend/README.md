@@ -2,18 +2,49 @@
 
 A comprehensive backend system for an AI-powered interview platform featuring speech-to-text, text-to-speech, AI evaluation using Google Gemini, payment processing, and automated report generation.
 
-## 🚀 Features
+## 🚀 Advanced Features
 
-- **Authentication & Authorization**: JWT-based auth with role-based access control
-- **AI Interview Evaluation**: Powered by Google Gemini API for intelligent assessment
-- **Speech Services**: Text-to-Speech and Speech-to-Text using Google Cloud APIs
-- **Payment Processing**: Integrated Stripe and Razorpay for subscription management
-- **Email Services**: Automated notifications and report delivery
-- **Report Generation**: PDF reports with detailed analytics
-- **File Upload**: Resume and audio file handling with Cloudinary
-- **Real-time Features**: WebSocket support for live interviews
-- **Rate Limiting**: Protection against abuse
-- **Comprehensive Logging**: Winston-based logging system
+- **🤖 AI-Powered Interview System**: 
+  - Resume-based question generation using Google Gemini
+  - Intelligent answer evaluation with detailed feedback
+  - Comprehensive personality and skills assessment
+  - Industry benchmarking and performance comparison
+
+- **🎵 Advanced Speech Technology**:
+  - Customizable Text-to-Speech with voice selection
+  - Role-specific voice recommendations
+  - High-quality Speech-to-Text transcription
+  - Real-time audio processing and analysis
+
+- **📄 Resume Intelligence**:
+  - AI-powered resume analysis and skill extraction
+  - Role-specific question generation based on candidate background
+  - Skills matching against job requirements
+  - Experience-based interview customization
+
+- **📊 Comprehensive Analytics & Reporting**:
+  - AI-generated detailed interview reports
+  - Personality assessment and team fit analysis
+  - Performance trends and skill development tracking
+  - Personalized improvement recommendations
+
+- **🔐 Enterprise-Grade Security**:
+  - JWT-based authentication with role management
+  - Subscription-based access control
+  - Rate limiting and API protection
+  - Secure file handling and storage
+
+- **💳 Payment & Subscription Management**:
+  - Multi-gateway support (Stripe & Razorpay)
+  - Flexible subscription plans with usage limits
+  - Automated billing and invoice generation
+  - Webhook-based payment processing
+
+- **📧 Intelligent Communication**:
+  - Automated email notifications with templates
+  - Report delivery and sharing
+  - Interview scheduling and reminders
+  - Multi-language support
 
 ## 📋 Prerequisites
 

@@ -336,6 +336,12 @@ class ReportService {
       content: this.generateSkillsAssessment(interview)
     });
 
+    // AI-Generated Recommendations
+    sections.push({
+      title: 'AI-Generated Recommendations',
+      content: this.generateRecommendationsSection(interview)
+    });
+
     // Time Management
     sections.push({
       title: 'Time Management',
@@ -352,19 +358,43 @@ class ReportService {
     }
 
     return `
-    Overall Performance: ${aiAnalysis.overall}%
+    OVERALL PERFORMANCE ASSESSMENT
     
-    Key Metrics:
-    • Communication: ${aiAnalysis.communication}%
-    • Technical Skills: ${aiAnalysis.technical}%
-    • Problem Solving: ${aiAnalysis.problemSolving}%
-    • Confidence: ${aiAnalysis.confidence}%
+    Overall Score: ${aiAnalysis.overall}%
     
-    Strengths Demonstrated:
-    ${aiAnalysis.strengths?.map(s => `• ${s}`).join('\n') || 'None identified'}
+    Core Competency Breakdown:
+    • Communication Skills: ${aiAnalysis.communication}%
+    • Technical Proficiency: ${aiAnalysis.technical}%
+    • Problem-Solving Ability: ${aiAnalysis.problemSolving}%
+    • Confidence Level: ${aiAnalysis.confidence}%
     
-    Areas for Improvement:
-    ${aiAnalysis.improvements?.map(i => `• ${i}`).join('\n') || 'None identified'}
+    DETAILED ANALYSIS METRICS:
+    • Response Quality: ${aiAnalysis.detailedAnalysis?.responseQuality || 'N/A'}%
+    • Clarity of Expression: ${aiAnalysis.detailedAnalysis?.clarity || 'N/A'}%
+    • Relevance to Role: ${aiAnalysis.detailedAnalysis?.relevance || 'N/A'}%
+    • Answer Depth: ${aiAnalysis.detailedAnalysis?.depth || 'N/A'}%
+    • Use of Examples: ${aiAnalysis.detailedAnalysis?.examples || 'N/A'}%
+    
+    KEY STRENGTHS DEMONSTRATED:
+    ${aiAnalysis.strengths?.map(s => `• ${s}`).join('\n') || '• None identified'}
+    
+    AREAS FOR IMPROVEMENT:
+    ${aiAnalysis.improvements?.map(i => `• ${i}`).join('\n') || '• None identified'}
+    
+    PERSONALITY ASSESSMENT:
+    Work Style: ${aiAnalysis.personalityAssessment?.workStyle || 'Not assessed'}
+    Team Fit: ${aiAnalysis.personalityAssessment?.teamFit || 'Not assessed'}
+    Leadership Potential: ${aiAnalysis.personalityAssessment?.leadership || 'N/A'}%
+    
+    Key Personality Traits:
+    ${aiAnalysis.personalityAssessment?.traits?.map(t => 
+      `• ${t.trait}: ${t.score}% - ${t.description}`
+    ).join('\n') || '• Not assessed'}
+    
+    INDUSTRY COMPARISON:
+    Performance Percentile: ${aiAnalysis.industryComparison?.percentile || 'N/A'}%
+    Benchmark: ${aiAnalysis.industryComparison?.comparison || 'Not available'}
+    Strong Areas: ${aiAnalysis.industryComparison?.benchmarkAreas?.join(', ') || 'Not specified'}
     `;
   }
 
@@ -397,6 +427,7 @@ class ReportService {
   private generateSkillsAssessment(interview: IInterview): string {
     const responses = interview.responses || [];
     const questions = interview.questions || [];
+    const aiAnalysis = interview.aiAnalysis;
     
     // Group by category
     const categoryScores: { [key: string]: number[] } = {};
@@ -412,14 +443,84 @@ class ReportService {
       }
     });
 
-    let assessment = 'Skills Assessment by Category:\n\n';
+    let assessment = 'SKILLS ASSESSMENT BY CATEGORY:\n\n';
     
     Object.entries(categoryScores).forEach(([category, scores]) => {
       const avgScore = Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
       assessment += `${category}: ${avgScore}% (${scores.length} questions)\n`;
     });
 
+    // Add AI-driven skills analysis if available
+    if (aiAnalysis?.skillsAssessment) {
+      assessment += '\n\nDETAILED SKILLS ANALYSIS:\n\n';
+      
+      if (aiAnalysis.skillsAssessment.technicalSkills?.length > 0) {
+        assessment += 'Technical Skills Demonstrated:\n';
+        aiAnalysis.skillsAssessment.technicalSkills.forEach(skill => {
+          assessment += `• ${skill.skill}: ${skill.proficiency} level ${skill.demonstrated ? '✓' : '✗'}\n`;
+          if (skill.evidence?.length > 0) {
+            assessment += `  Evidence: ${skill.evidence.join(', ')}\n`;
+          }
+        });
+        assessment += '\n';
+      }
+      
+      if (aiAnalysis.skillsAssessment.softSkills?.length > 0) {
+        assessment += 'Soft Skills Assessment:\n';
+        aiAnalysis.skillsAssessment.softSkills.forEach(skill => {
+          assessment += `• ${skill.skill}: ${skill.score}%\n`;
+          if (skill.examples?.length > 0) {
+            assessment += `  Examples: ${skill.examples.join(', ')}\n`;
+          }
+        });
+      }
+    }
+
     return assessment;
+  }
+
+  private generateRecommendationsSection(interview: IInterview): string {
+    const aiAnalysis = interview.aiAnalysis;
+    
+    if (!aiAnalysis?.recommendations) {
+      return 'No AI-generated recommendations available.';
+    }
+
+    let recommendations = 'AI-POWERED DEVELOPMENT RECOMMENDATIONS:\n\n';
+    
+    if (aiAnalysis.recommendations.immediate?.length > 0) {
+      recommendations += 'IMMEDIATE ACTIONS (Next 2 weeks):\n';
+      aiAnalysis.recommendations.immediate.forEach(action => {
+        recommendations += `• ${action}\n`;
+      });
+      recommendations += '\n';
+    }
+    
+    if (aiAnalysis.recommendations.shortTerm?.length > 0) {
+      recommendations += 'SHORT-TERM GOALS (Next 3 months):\n';
+      aiAnalysis.recommendations.shortTerm.forEach(goal => {
+        recommendations += `• ${goal}\n`;
+      });
+      recommendations += '\n';
+    }
+    
+    if (aiAnalysis.recommendations.longTerm?.length > 0) {
+      recommendations += 'LONG-TERM DEVELOPMENT (Next year):\n';
+      aiAnalysis.recommendations.longTerm.forEach(development => {
+        recommendations += `• ${development}\n`;
+      });
+      recommendations += '\n';
+    }
+    
+    if (aiAnalysis.recommendations.resources?.length > 0) {
+      recommendations += 'RECOMMENDED LEARNING RESOURCES:\n';
+      aiAnalysis.recommendations.resources.forEach(resource => {
+        recommendations += `• ${resource.title} (${resource.type}) - Priority: ${resource.priority}\n`;
+        recommendations += `  ${resource.description}\n`;
+      });
+    }
+
+    return recommendations;
   }
 
   private generateTimeAnalysis(interview: IInterview): string {
