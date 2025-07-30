@@ -78,20 +78,42 @@ export function StudentManager() {
     setCandidates(candidates.filter((s) => s.id !== id))
   }
 
-  const handleCsvUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCsvUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file && file.type === "text/csv") {
       setCsvFile(file)
       const reader = new FileReader()
-      reader.onload = (event) => {
+      reader.onload = async (event) => {
         const text = event.target?.result as string
         const lines = text.split("\n").filter(Boolean)
         const newCandidatesFromCsv: Candidate[] = lines.slice(1).map((line, index) => {
           const [name, email, role] = line.split(",").map((s) => s.trim())
-          return { id: `csv${candidates.length + index + 1}`, name, email, role }
+          // Split name into first and last for backend
+          const [firstName, ...lastNameArr] = name.split(" ")
+          const lastName = lastNameArr.join(" ") || "Candidate"
+          return { id: `csv${candidates.length + index + 1}`, name, email, role, firstName, lastName }
         })
-        setCandidates([...candidates, ...newCandidatesFromCsv])
-        alert("Candidates imported from CSV!")
+        // Send to backend
+        try {
+          const res = await fetch("/api/admin/bulk-upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newCandidatesFromCsv.map(c => ({
+              email: c.email,
+              firstName: c.firstName,
+              lastName: c.lastName,
+              role: "candidate"
+            })))
+          })
+          if (res.ok) {
+            setCandidates([...candidates, ...newCandidatesFromCsv])
+            alert("Candidates uploaded to backend and imported from CSV!")
+          } else {
+            alert("Backend upload failed.")
+          }
+        } catch (err) {
+          alert("Error uploading to backend.")
+        }
       }
       reader.readAsText(file)
     } else {

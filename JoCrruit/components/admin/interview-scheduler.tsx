@@ -107,7 +107,7 @@ export function InterviewScheduler() {
     }
   }
 
-  const handleScheduleInterview = (e: React.FormEvent) => {
+  const handleScheduleInterview = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (selectedCandidates.length === 0) {
@@ -149,21 +149,35 @@ export function InterviewScheduler() {
       return
     }
 
-    const scheduledInterviews = selectedCandidates.map((candidateId) => {
-      // Renamed from selectedStudents
-      const candidate = mockCandidates.find((s) => s.id === candidateId) // Renamed from mockStudents
-      return {
-        candidateName: candidate?.name, // Renamed from studentName
-        candidateEmail: candidate?.email, // Renamed from studentEmail
-        interviewTitle: interviewDetails?.title,
-        dueDate,
-        instructions,
-        ...interviewDetails,
+    // Send to backend
+    try {
+      const res = await fetch("/api/admin/assign-interview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          candidateIds: selectedCandidates,
+          interview: {
+            title: interviewDetails.title,
+            description: interviewDetails.description,
+            position: interviewDetails.title,
+            difficulty: (interviewDetails.difficulty || "Intermediate").toLowerCase(),
+            type: "technical",
+            status: "scheduled",
+            duration: parseInt(interviewDetails.duration) || 45,
+            scheduledAt: dueDate,
+            questions: [],
+            instructions,
+          }
+        })
+      })
+      if (res.ok) {
+        alert(`Interviews scheduled for ${selectedCandidates.length} candidate(s) and sent to backend!`)
+      } else {
+        alert("Backend interview assignment failed.")
       }
-    })
-
-    console.log("Scheduled Interviews:", scheduledInterviews)
-    alert(`Interviews scheduled for ${selectedCandidates.length} candidate(s)!`) // Renamed from selectedStudents
+    } catch (err) {
+      alert("Error assigning interviews to backend.")
+    }
 
     // Reset form
     setSelectedCandidates([]) // Renamed from selectedStudents

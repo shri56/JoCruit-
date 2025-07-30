@@ -23,6 +23,7 @@ import reportRoutes from '@/routes/reports';
 import paymentRoutes from '@/routes/payments';
 import uploadRoutes from '@/routes/uploads';
 import webhookRoutes from '@/routes/webhooks';
+import adminRoutes from '@/routes/admin';
 
 class Server {
   private app: express.Application;
@@ -146,6 +147,7 @@ class Server {
     this.app.use('/api/payments', paymentRoutes);
     this.app.use('/api/uploads', uploadRoutes);
     this.app.use('/api/webhooks', webhookRoutes);
+    this.app.use('/api/admin', adminRoutes);
 
     // 404 handler for API routes
     this.app.use('/api/*', (req, res) => {
