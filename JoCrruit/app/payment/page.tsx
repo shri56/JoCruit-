@@ -17,7 +17,11 @@ export default function PaymentPage() {
   const isDarkMode = theme === "dark"
 
   const handlePayment = (method: string) => {
-    alert(`Simulating payment with ${method}. In a real app, this would integrate with a payment gateway.`)
+    // PAYMENT INTEGRATION DISABLED FOR NOW
+    alert(`Payment integration is currently disabled. This would normally process ${method} payment.`)
+    
+    // COMMENTED OUT - Original payment logic
+    // alert(`Simulating payment with ${method}. In a real app, this would integrate with a payment gateway.`)
     // In a real application, you would integrate with a payment gateway here.
     // For example, Razorpay, Stripe, PayPal SDKs.
   }

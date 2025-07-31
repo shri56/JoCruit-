@@ -1,3 +1,7 @@
+// PAYMENT INTEGRATION DISABLED FOR NOW
+// This service is kept for future use but all payment processing is currently disabled
+// To re-enable: uncomment the payment logic and add proper Stripe/Razorpay keys
+
 import Stripe from 'stripe';
 import Razorpay from 'razorpay';
 import { Payment } from '@/models';
