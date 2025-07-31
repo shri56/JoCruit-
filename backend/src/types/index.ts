@@ -28,8 +28,8 @@ export interface IUser extends Document {
     status: 'active' | 'cancelled' | 'expired';
     startDate: Date;
     endDate: Date;
-    stripeCustomerId?: string;
-    stripeSubscriptionId?: string;
+    razorpayCustomerId?: string;
+    razorpaySubscriptionId?: string;
   };
   preferences?: {
     language: string;
@@ -125,7 +125,7 @@ export interface IPayment extends Document {
   amount: number;
   currency: string;
   status: 'pending' | 'completed' | 'failed' | 'refunded';
-  paymentMethod: 'stripe' | 'razorpay' | 'paypal';
+  paymentMethod: 'razorpay' | 'paypal';
   paymentIntentId: string;
   subscriptionId?: string;
   plan: 'basic' | 'premium' | 'enterprise';

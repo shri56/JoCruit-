@@ -21,8 +21,8 @@ const subscriptionSchema = new Schema({
     type: Date,
     default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
   },
-  stripeCustomerId: String,
-  stripeSubscriptionId: String
+  razorpayCustomerId: String,
+  razorpaySubscriptionId: String
 }, { _id: false });
 
 const preferencesSchema = new Schema({

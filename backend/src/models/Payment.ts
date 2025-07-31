@@ -27,7 +27,7 @@ const paymentSchema = new Schema<IPayment>({
   },
   paymentMethod: {
     type: String,
-    enum: ['stripe', 'razorpay', 'paypal'],
+    enum: ['razorpay', 'paypal'],
     required: [true, 'Payment method is required']
   },
   paymentIntentId: {

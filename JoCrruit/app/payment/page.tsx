@@ -17,8 +17,12 @@ export default function PaymentPage() {
   const isDarkMode = theme === "dark"
 
   const handlePayment = (method: string) => {
-    // PAYMENT INTEGRATION DISABLED FOR NOW
-    alert(`Payment integration is currently disabled. This would normally process ${method} payment.`)
+    // PAYMENT INTEGRATION - RAZORPAY ONLY
+    if (method === "Razorpay") {
+      alert(`Razorpay payment integration would be processed here. Currently disabled for development.`)
+    } else {
+      alert(`Payment integration is currently disabled. Only Razorpay is supported.`)
+    }
     
     // COMMENTED OUT - Original payment logic
     // alert(`Simulating payment with ${method}. In a real app, this would integrate with a payment gateway.`)

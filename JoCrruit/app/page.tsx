@@ -111,7 +111,7 @@ export default function LandingPage() {
       question: "What payment methods are accepted?",
       answer:
         // "Payments for the unlimited plan are securely processed via Stripe, supporting various options including major credit and debit cards. We are continuously exploring additional payment methods.",
-        "Payment integration is currently disabled. The app is in development mode with all features available for testing.",
+        "Payments are processed via Razorpay, supporting UPI, cards, and net banking. Payment integration is currently disabled for development.",
     },
     {
       question: "How can I cancel my subscription?",
@@ -429,8 +429,7 @@ export default function LandingPage() {
                     <Check className="w-5 h-5 text-green-500" /> Flexible cancellation anytime
                   </li>
                   <li className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                    <Check className="w-5 h-5 text-green-500" /> Secure payments via Stripe
-                    {/* <Check className="w-5 h-5 text-green-500" /> Secure payments via Stripe */}
+                    <Check className="w-5 h-5 text-green-500" /> Secure payments via Razorpay
                     <Check className="w-5 h-5 text-green-500" /> Payment integration disabled for development
                   </li>
                 </ul>
