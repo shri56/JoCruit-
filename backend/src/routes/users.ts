@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { authenticate } from '@/middleware/auth';
+import { AuthenticatedRequest } from '@/types';
 
 const router = Router();
 
@@ -7,7 +8,7 @@ const router = Router();
 router.use(authenticate);
 
 // Basic user profile endpoint
-router.get('/profile', async (req, res) => {
+router.get('/profile', async (req: AuthenticatedRequest, res) => {
   res.json({
     success: true,
     message: 'User profile endpoint',
@@ -16,15 +17,16 @@ router.get('/profile', async (req, res) => {
 });
 
 // GET /assigned-interviews - fetch interviews assigned to the logged-in user
-router.get('/assigned-interviews', async (req, res) => {
+router.get('/assigned-interviews', async (req: AuthenticatedRequest, res) => {
   try {
     const userId = req.user?._id;
     if (!userId) {
-      return res.status(401).json({ success: false, message: 'Unauthorized' });
+      res.status(401).json({ success: false, message: 'Unauthorized' });
+      return;
     }
     const interviews = await (await import('@/models')).Interview.find({ candidateId: userId });
     res.json({ success: true, data: { interviews } });
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).json({ success: false, message: 'Failed to fetch assigned interviews', error: err.message });
   }
 });

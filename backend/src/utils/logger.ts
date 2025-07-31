@@ -61,7 +61,7 @@ const logger = winston.createLogger({
     new winston.transports.File({
       filename: path.join(logsDir, 'app-%DATE%.log'),
       maxsize: 20971520, // 20MB
-      maxFiles: '14d' // Keep logs for 14 days
+      maxFiles: 14 // Keep logs for 14 days
     })
   ],
   

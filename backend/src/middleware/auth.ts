@@ -7,15 +7,16 @@ import logger from '@/utils/logger';
 /**
  * Middleware to authenticate JWT tokens
  */
-export const authenticate = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const authenticate = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const token = extractToken(req);
+    const token = extractToken(req as Request);
     
     if (!token) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         message: 'Access token required'
       });
+      return;
     }
 
     // Verify token
@@ -25,18 +26,20 @@ export const authenticate = async (req: AuthenticatedRequest, res: Response, nex
     const user = await User.findById(decoded.userId).select('+subscription');
     
     if (!user) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         message: 'Invalid token - user not found'
       });
+      return;
     }
 
     // Check if user is active/verified if required
     if (process.env.REQUIRE_EMAIL_VERIFICATION === 'true' && !user.isEmailVerified) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         message: 'Email verification required'
       });
+      return;
     }
 
     // Attach user to request
@@ -51,21 +54,23 @@ export const authenticate = async (req: AuthenticatedRequest, res: Response, nex
     next();
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         message: 'Invalid token'
       });
+      return;
     }
     
     if (error instanceof jwt.TokenExpiredError) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         message: 'Token expired'
       });
+      return;
     }
 
     logger.error('Authentication error:', error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: 'Authentication failed'
     });
@@ -76,19 +81,21 @@ export const authenticate = async (req: AuthenticatedRequest, res: Response, nex
  * Middleware to authorize specific roles
  */
 export const authorize = (...roles: string[]) => {
-  return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
     if (!req.user) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         message: 'Authentication required'
       });
+      return;
     }
 
     if (!roles.includes(req.user.role)) {
-      return res.status(403).json({
+      res.status(403).json({
         success: false,
         message: 'Insufficient permissions'
       });
+      return;
     }
 
     next();
@@ -223,7 +230,7 @@ export const checkPlanLimits = (feature: string) => {
  */
 export const optionalAuth = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
-    const token = extractToken(req);
+    const token = extractToken(req as Request);
     
     if (token) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
@@ -266,7 +273,7 @@ export const generateToken = (userId: string, expiresIn?: string): string => {
   return jwt.sign(
     { userId },
     process.env.JWT_SECRET!,
-    { expiresIn: expiresIn || process.env.JWT_EXPIRES_IN || '7d' }
+    { expiresIn: expiresIn || '24h' }
   );
 };
 
@@ -276,8 +283,8 @@ export const generateToken = (userId: string, expiresIn?: string): string => {
 export const generateRefreshToken = (userId: string): string => {
   return jwt.sign(
     { userId, type: 'refresh' },
-    process.env.REFRESH_TOKEN_SECRET!,
-    { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || '30d' }
+    process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET!,
+    { expiresIn: '7d' }
   );
 };
 

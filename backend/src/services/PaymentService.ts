@@ -335,7 +335,7 @@ class PaymentService {
     // Update subscription status
     const payment = await Payment.findOne({ 'metadata.razorpaySubscriptionId': subscription.id });
     if (payment) {
-      payment.status = 'cancelled';
+      payment.status = 'failed'; // Use 'failed' instead of 'cancelled' to match the enum
       await payment.save();
     }
   }
