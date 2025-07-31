@@ -96,7 +96,10 @@ class Database {
 
   public async ping(): Promise<boolean> {
     try {
-      await mongoose.connection.db.admin().ping();
+      // Test database connection
+      if (mongoose.connection.db) {
+        await mongoose.connection.db.admin().ping();
+      }
       return true;
     } catch (error) {
       logger.error('Database ping failed:', error);

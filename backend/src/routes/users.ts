@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Response } from 'express';
 import { authenticate } from '@/middleware/auth';
 import { AuthenticatedRequest } from '@/types';
 
@@ -8,7 +8,7 @@ const router = Router();
 router.use(authenticate);
 
 // Basic user profile endpoint
-router.get('/profile', async (req: AuthenticatedRequest, res) => {
+router.get('/profile', async (req: AuthenticatedRequest, res: Response) => {
   res.json({
     success: true,
     message: 'User profile endpoint',
@@ -17,7 +17,7 @@ router.get('/profile', async (req: AuthenticatedRequest, res) => {
 });
 
 // GET /assigned-interviews - fetch interviews assigned to the logged-in user
-router.get('/assigned-interviews', async (req: AuthenticatedRequest, res) => {
+router.get('/assigned-interviews', async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user?._id;
     if (!userId) {
