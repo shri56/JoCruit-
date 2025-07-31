@@ -96,7 +96,7 @@ class Server {
     this.app.use('/api/', limiter);
 
     // Logging
-    this.app.use(morgan('combined', { stream: logger.stream }));
+    this.app.use(morgan('combined'));
 
     // Body parsing middleware
     this.app.use(express.json({ limit: '10mb' }));

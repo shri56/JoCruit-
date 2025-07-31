@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { User, Interview } from '@/models';
 import { authenticate } from '@/middleware/auth';
 import { IUser } from '@/types';
-import csvParser from 'csv-parse/sync';
+import { parse } from 'csv-parse/sync';
 
 const router = Router();
 
@@ -23,7 +23,7 @@ router.post('/bulk-upload', async (req, res) => {
       users = req.body;
     } else if (req.is('text/csv') || req.is('application/csv')) {
       const csv = req.body;
-      users = csvParser.parse(csv, { columns: true });
+      users = parse(csv, { columns: true });
     } else {
       return res.status(400).json({ success: false, message: 'Unsupported content type' });
     }
